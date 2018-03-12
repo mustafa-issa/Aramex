@@ -10,6 +10,7 @@ namespace Aramex.Models
 
     public class DAL
     {
+        private const string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
         public static T GetValue<T>(object readerValue, T defaultValue = default(T))
         {
             if (readerValue == DBNull.Value)
@@ -18,31 +19,29 @@ namespace Aramex.Models
                 return (T)Convert.ChangeType(readerValue, typeof(T));
         }
 
-        string connectionString = "Server=ENAMDEV036\\SQLEXPRESS;Initial Catalog=AramexReportDB;User Id=selwade; Password=123; Integrated Security=SSPI;Trusted_Connection=False";
+        //string connectionString = "Server=.\\SQLEXPRESS;Initial Catalog=AramexReportDB;User Id=selwade; Password=123; Integrated Security=SSPI;Trusted_Connection=False";
+        
+
         public IList<Site> GetAllSites()
         {
             List<Site> sites = new List<Site>();
-            string query = @"
-                DECLARE @Table TABLE
-                    (
-                      NO int,
-                      FCUAddress int,
-                      ServedArea nvarchar(15),
-                      RunHoursWork float,
-                      PreventiveMaintainanceRun float,
-                      PreventiveMaintainanceOverdue float,
-                      RunName nvarchar(30),
-                      OverdueName nvarchar(30)
-                    )
-                    insert into @Table(NO, FCUAddress, ServedArea, PreventiveMaintainanceRun, RunName, OverdueName)
-                    SELECT cast(replace(TABLE_NAME,'Aramex_100_TL', '') as int), 
-                    cast(replace(TABLE_NAME,'Aramex_100_TL', '') as int) + 1601, 
-                    'Warehouse', 2000, TABLE_NAME, 'Aramex_100_TL' + CAST((cast(replace(TABLE_NAME,'Aramex_100_TL', '') as int) + 44) as nvarchar(30))
-                    FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE '%100%' and table_name not like '%err%'
-
-                    select * from @Table where no < 44
-                    order by no
-                ";
+            string query = @" DECLARE @Table TABLE
+                            (
+                              NO int,
+                              FCUAddress int,
+                              ServedArea nvarchar(15),
+                              RunHoursWork float,
+                              PreventiveMaintainanceRun float,
+                              PreventiveMaintainanceOverdue float,
+                              RunName nvarchar(30),
+                              OverdueName nvarchar(30)
+                            )
+                            insert into @Table(NO, FCUAddress, ServedArea, PreventiveMaintainanceRun, RunName, OverdueName)
+                            SELECT cast(replace(TABLE_NAME,'Aramex_100_TL', '') as int), 
+                            cast(replace(TABLE_NAME,'Aramex_100_TL', '') as int) + 1601, 
+                            'Warehouse', 2000, TABLE_NAME, 'Aramex_100_TL' + CAST((cast(replace(TABLE_NAME,'Aramex_100_TL', '') as int) + 44) as nvarchar(30))
+                            FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE '%100%' and table_name not like '%err%'
+                            select * from @Table where no < 44 order by no";
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 SqlCommand cmd = new SqlCommand(query, con);
@@ -75,12 +74,9 @@ namespace Aramex.Models
             DataTable dt = new DataTable();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = @"
-                    declare @maxDate as datetime
+                string query = @"declare @maxDate as datetime
                     set @maxDate = (select max(ts) from {0})
-                    SELECT value
-                      FROM {0}
-                      where ts = @maxDate";
+                    SELECT value FROM {0} where ts = @maxDate";
                 string formattedQuery = String.Format(query, table);
                 SqlCommand cmd = new SqlCommand(formattedQuery, conn);
                 cmd.CommandType = CommandType.Text;
