@@ -19,13 +19,18 @@ namespace Aramex.Controllers
             return View();
         }
 
-        public JsonResult GetSites()
+        public ActionResult GetSites()
         {
             try
             {
                 DAL siteDAL = new DAL();
                 List<Site> sites = new List<Site>();
                 sites = siteDAL.GetAllSites().ToList();
+                foreach (var site in sites)
+                {
+                    site.RunHoursWork = siteDAL.GetPreventiveMaintainanceRun(site.RunName);
+                    site.PreventiveMaintainanceOverdue = siteDAL.GetPreventiveMaintainanceRun(site.OverdueName);
+                }
                 return Json(sites, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

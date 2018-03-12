@@ -123,6 +123,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\datatables.min.css" />
+    <Content Include="Content\images\aramex-300x86.png" />
+    <Content Include="Content\images\ICONIC Logo.png" />
     <Content Include="data\objects.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
