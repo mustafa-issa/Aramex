@@ -19,13 +19,13 @@ namespace Aramex.Controllers
             return View();
         }
 
-        public ActionResult GetSites()
+        public ActionResult GetFcuSites()
         {
             try
             {
                 DAL siteDAL = new DAL();
-                List<Site> sites = new List<Site>();
-                sites = siteDAL.GetAllSites().ToList();
+                List<FcuSite> sites = new List<FcuSite>();
+                sites = siteDAL.GetAllFcuSites().ToList();
                 foreach (var site in sites)
                 {
                     site.RunHoursWork = siteDAL.GetPreventiveMaintainanceRun(site.RunName);
@@ -39,6 +39,19 @@ namespace Aramex.Controllers
             }
         }
 
-
+        public ActionResult GetMechanicalSites()
+        {
+            try
+            {
+                DAL siteDAL = new DAL();
+                List<MechnicalSite> sites = new List<MechnicalSite>();
+                sites = siteDAL.GetAllMechnicalSites().ToList();
+                return Json(sites, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

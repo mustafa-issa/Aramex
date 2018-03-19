@@ -5,9 +5,10 @@ using System.Web;
 
 namespace Aramex.Models
 {
-    public class FcuSite
+    public class MechnicalSite
     {
         public int NO { get; set; }
+        public string ComponentName { get; set; }
         public int FCUAddress { get; set; }
         public string ServedArea { get; set; }
         public double RunHoursWork { get; set; }
@@ -15,5 +16,6 @@ namespace Aramex.Models
         public double PreventiveMaintainanceOverdue { get; set; }
         public string RunName { get; set; }
         public string OverdueName { get; set; }
+        public string TripHours { get; set; }
     }
 }

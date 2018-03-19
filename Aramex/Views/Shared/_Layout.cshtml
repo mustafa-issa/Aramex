@@ -9,8 +9,7 @@
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
-
+    
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -51,38 +50,74 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/datatables")
     @Scripts.Render("~/bundles/bootstrap")
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
     @RenderSection("scripts", required: false)
     <script>
-        $(document).ready(function () {
-            $.ajax({
-                type: "GET",
-                contentType: "application/json; charset=utf-8",
-                url: '@Url.Action("GetSites", "Home")',
-                dataType: "json",
-                traditional: true,
-                success: function (data) {
-                    $('#datatable_tabletools tbody tr').remove();
-                    $.each(data, function (i, item) {
-                        var rows = "<tr>" +
-                            "<td>" + item.NO + "</td>" +
-                            "<td>" + item.FCUAddress + "</td>" +
-                            "<td>" + item.ServedArea + "</td>" +
-                            "<td>" + item.RunHoursWork + "</td>" +
-                            "<td>" + item.PreventiveMaintainanceRun + "</td>" +
-                            "<td>" + item.PreventiveMaintainanceOverdue + "</td>" +
-                            "</tr>";
-                        $('#datatable_tabletools').append(rows);
-                    });
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: '@Url.Action("GetFcuSites", "Home")',
+            dataType: "json",
+            traditional: true,
+            success: function (data) {
+                $('#datatable_tabletools tbody tr').remove();
+                $.each(data, function (i, item) {
+                    var rows = "<tr>" +
+                        "<td>" + item.NO + "</td>" +
+                        "<td>" + item.FCUAddress + "</td>" +
+                        "<td>" + item.ServedArea + "</td>" +
+                        "<td>" + item.RunHoursWork + "</td>" +
+                        "<td>" + item.PreventiveMaintainanceRun + "</td>" +
+                        "<td>" + item.PreventiveMaintainanceOverdue + "</td>" +
+                        "</tr>";
+                    $('#datatable_tabletools').append(rows);
+                });
+                $('#datatable_tabletools').DataTable();
+            },
+            error: function (err) {
+                alert('error');
+            }
+        });
+    });
 
-                    $('#datatable_tabletools').DataTable();
-                },
-                error: function (err) {
-                    alert('error');
-                }
-            });
-            
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: '@Url.Action("GetMechanicalSites", "Home")',
+            dataType: "json",
+            traditional: true,
+            success: function (data) {
+                $('#mechanical_table tbody tr').remove();
+                $.each(data, function (i, item) {
+                    var rows = "<tr>" +
+                        "<td>" + item.NO + "</td>" +
+                        "<td>" + item.ComponentName + "</td>" +
+                        "<td>" + item.ServedArea + "</td>" +
+                        "<td>" + item.RunHoursWork + "</td>" +
+                        "<td>" + item.PreventiveMaintainanceRun + "</td>" +
+                        "<td>" + item.PreventiveMaintainanceOverdue + "</td>" +
+                        "<td>" + item.TripHours + "</td>" +
+                        "</tr>";
+                    $('#mechanical_table').append(rows);
+                });
+
+                $('#mechanical_table').DataTable({
+                    dom: 'Bfrtip',
+                    buttons: [
+                       'pdf'
+                    ]
+                });
+            },
+            error: function (err) {
+                alert('error');
+            }
         });
     </script>
+
 </body>
 </html>
