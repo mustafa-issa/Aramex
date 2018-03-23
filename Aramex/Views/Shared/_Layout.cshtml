@@ -50,11 +50,11 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/datatables")
     @Scripts.Render("~/bundles/bootstrap")
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>*@
     
-    <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+    @*<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>*@
     @RenderSection("scripts", required: false)
     <script>
     $(document).ready(function () {
@@ -80,7 +80,7 @@
                 $('#datatable_tabletools').DataTable();
             },
             error: function (err) {
-                alert('error');
+                //alert('error');
             }
         });
     });
@@ -98,23 +98,20 @@
                         "<td>" + item.NO + "</td>" +
                         "<td>" + item.ComponentName + "</td>" +
                         "<td>" + item.ServedArea + "</td>" +
-                        "<td>" + item.RunHoursWork + "</td>" +
-                        "<td>" + item.PreventiveMaintainanceRun + "</td>" +
-                        "<td>" + item.PreventiveMaintainanceOverdue + "</td>" +
-                        "<td>" + item.TripHours + "</td>" +
+                        "<td>" + (item.RunHoursWork == null ? "" : item.RunHoursWork) + "</td>" +
+                        "<td>" + (item.PreventiveMaintainanceRun == null ? "" : item.PreventiveMaintainanceRun) + "</td>" +
+                        "<td>" + (item.PreventiveMaintainanceOverdue == null ? "" : item.PreventiveMaintainanceOverdue) + "</td>" +
+                        "<td>" + (item.TripHours == null ? "" : item.TripHours) + "</td>" +
                         "</tr>";
                     $('#mechanical_table').append(rows);
                 });
 
                 $('#mechanical_table').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [
-                       'pdf'
-                    ]
+                    
                 });
             },
             error: function (err) {
-                alert('error');
+               // alert('error');
             }
         });
     </script>

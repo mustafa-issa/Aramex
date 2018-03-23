@@ -1,4 +1,5 @@
 ﻿using Aramex.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,12 @@ namespace Aramex.Controllers
                     site.RunHoursWork = siteDAL.GetPreventiveMaintainanceRun(site.RunName);
                     site.PreventiveMaintainanceOverdue = siteDAL.GetPreventiveMaintainanceRun(site.OverdueName);
                 }
-                return Json(sites, JsonRequestBehavior.AllowGet);
+                var list = JsonConvert.SerializeObject(sites, Formatting.None, new JsonSerializerSettings()
+                            {
+                                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                            });
+
+                return Content(list, "application/json");
             }
             catch (Exception ex)
             {
@@ -46,12 +52,18 @@ namespace Aramex.Controllers
                 DAL siteDAL = new DAL();
                 List<MechnicalSite> sites = new List<MechnicalSite>();
                 sites = siteDAL.GetAllMechnicalSites().ToList();
-                return Json(sites, JsonRequestBehavior.AllowGet);
+                var list = JsonConvert.SerializeObject(sites, Formatting.None, new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                });
+
+                return Content(list, "application/json");
             }
             catch (Exception ex)
             {
                 return Json(ex, JsonRequestBehavior.AllowGet);
             }
         }
+
     }
 }
