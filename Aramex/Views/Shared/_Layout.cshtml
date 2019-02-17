@@ -94,13 +94,14 @@
             success: function (data) {
                 $('#mechanical_table tbody tr').remove();
                 $.each(data, function (i, item) {
+                    var RunHoursWork, PreventiveMaintainanceRun, PreventiveMaintainanceOverdue;
                     var rows = "<tr>" +
                         "<td>" + item.NO + "</td>" +
                         "<td>" + item.ComponentName + "</td>" +
                         "<td>" + item.ServedArea + "</td>" +
-                        "<td>" + (item.RunHoursWork == null ? "" : item.RunHoursWork) + "</td>" +
-                        "<td>" + (item.PreventiveMaintainanceRun == null ? "" : item.PreventiveMaintainanceRun) + "</td>" +
-                        "<td>" + (item.PreventiveMaintainanceOverdue == null ? "" : item.PreventiveMaintainanceOverdue) + "</td>" +
+                        (item.RunHoursWork == null ? "<td style='background:gray'></td>" : ("<td>" + item.RunHoursWork + "</td>")) +
+                        (item.PreventiveMaintainanceRun == null ? "<td style='background:gray'></td>" : ("<td>" + item.PreventiveMaintainanceRun + "</td>")) +
+                        (item.PreventiveMaintainanceOverdue == null ? "<td style='background:gray'></td>" : ("<td>" + item.PreventiveMaintainanceOverdue + "</td>")) +
                         "<td>" + (item.TripHours == null ? "" : item.TripHours) + "</td>" +
                         "</tr>";
                     $('#mechanical_table').append(rows);

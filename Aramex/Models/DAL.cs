@@ -134,14 +134,14 @@ namespace Aramex.Models
             return sites;
         }
 
-        public double GetPreventiveMaintainanceRun(string table)
+        public int? GetPreventiveMaintainanceRun(string table)
         {
             DataTable dt = new DataTable();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 string query = @"declare @maxDate as datetime
                     set @maxDate = (select max(ts) from {0})
-                    SELECT value FROM {0} where ts = @maxDate";
+                    SELECT value FROM {0} where DATEDIFF(MINUTE, ts, @maxDate) < 3";
                 string formattedQuery = String.Format(query, table);
                 SqlCommand cmd = new SqlCommand(formattedQuery, conn);
                 cmd.CommandType = CommandType.Text;
@@ -150,7 +150,7 @@ namespace Aramex.Models
                     conn.Open();
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     adapter.Fill(dt);
-                    return double.Parse(dt.Rows[0]["value"].ToString());
+                    return (int)double.Parse(dt.Rows[0]["value"].ToString());
                 }
                 catch (Exception ex)
                 {
@@ -192,7 +192,7 @@ namespace Aramex.Models
                     if (componentNames[i, 1] != "0")
                 {
                     site.RunHoursWork = GetPreventiveMaintainanceRun(componentNames[i, 1]);
-                    site.PreventiveMaintainanceRun = double.Parse(componentNames[i, 3]);
+                    site.PreventiveMaintainanceRun = int.Parse(componentNames[i, 3]);
                     site.PreventiveMaintainanceOverdue = GetPreventiveMaintainanceRun(componentNames[i, 4]);
                 }
                 site.TripHours = GetPreventiveMaintainanceRun(componentNames[i, 5]);

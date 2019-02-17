@@ -10,9 +10,9 @@ namespace Aramex.Models
         public int NO { get; set; }
         public int FCUAddress { get; set; }
         public string ServedArea { get; set; }
-        public double RunHoursWork { get; set; }
-        public double PreventiveMaintainanceRun { get; set; }
-        public double PreventiveMaintainanceOverdue { get; set; }
+        public int? RunHoursWork { get; set; }
+        public int? PreventiveMaintainanceRun { get; set; }
+        public int? PreventiveMaintainanceOverdue { get; set; }
         public string RunName { get; set; }
         public string OverdueName { get; set; }
     }

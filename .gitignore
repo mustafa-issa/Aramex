@@ -73,3 +73,4 @@ _[Ss]cripts
 *.nupkg
 *.ncrunchsolution
 *.dot[Cc]over
+/.vs/Aramex/v15/Server/sqlite3
